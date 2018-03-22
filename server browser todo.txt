@@ -1,0 +1,70 @@
+Future
+-	Implement server authentication
+	-	@B&D
+		-	Ping server IP and port (from hamstar.pw?)
+			-	@Info
+https://stackoverflow.com/questions/27218989/how-to-use-golang-to-compose-raw-tcp-packet-using-gopacket-and-send-it-via-raw
+		-	Implement OpenID authentication with steam
+			-	@Info
+				-	https://steamcommunity.com/dev
+				-	https://github.com/IdentityModel/IdentityModel.OidcClient2
+
+
+
+
+v1.0
+-	Normalize colors better
+-	Add sort
+-	Add column labels
+-	Add better mod listing
+-	Indicate passworded servers
+-	Filter private (non-port forwarded?) servers
+v0.9
+-	@Test server list
+
+-	Add patreon link
+-	Filter unvalidated servers
+-	@Test
+-	Fix google script data rendering and internal formatting
+-	Add verification field
+-	Fix time span rendering
+-	Render MOTD with server list
+-	Ignore servers from local IP addresses
+-	@HH
+	-	Ensure private server command is disabled after grace period
+	-	Signal update server status every 10 minutes from server
+	-	Fix HH control panel icon persisting with New! update blinker
+	-	Reduce HH hammering for public IP
+	-	Fix redundant 'Server connection data added to browser' from clients periodically
+-	@Google script
+	-	Prevent multiple servers per IP and port
+	-	Add caching of list (refreshes every 5 mins)
+	-	Optimize old server culling
+	-	Remove old servers from list
+	-	Improve log output
+-	Add 'Join Server' option for each server
+-	Request server list
+-	@Implement Helpers server listing
+	-	Set server list items to expire after no activity for 1 hour
+	-	Prevent transmitting passworded or non-port forwarded servers
+	-	Set clients to update player count, player pvp count, and team count on server
+	-	Set server to transmit data before clients
+	-	Implement transmissions
+-	@Implement server list site
+	-	Validate server
+	-	Implement returning server list
+	-	Implement submitting a server entry
+-	Implement dialog
+	-	Implement server list item
+	-	Layout dialog
+		-	@Layout
+			-	Search input (top)
+			-	List sort buttons
+			-	Server list
+			-	Refresh button
+-	Open dialog for multiplayer menu
+-	Add menu item to multiplayer menu
+	-	Implement menu transition
+	-	Implement menu item interaction
+	-	Define menu item (implement rendering)
+	-	@Discover rendering method for menu items
