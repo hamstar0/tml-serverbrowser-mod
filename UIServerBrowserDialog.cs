@@ -137,8 +137,12 @@ namespace ServerBrowser {
 			Action<string> list_ready = delegate( string output ) {
 				UIServerDataElement[] list = UIServerDataElement.GetListFromJsonStr( this.Theme, output, (ip, port) => {
 					this.Close();
-					NetHelpers.JoinServer( ip, port );
-					// TODO: Join game
+
+					try {
+						NetHelpers.JoinServer( ip, port );
+					} catch( Exception e ) {
+						LogHelpers.Log( e.ToString() );
+					}
 				} );
 
 				if( list.Length > 0 ) {

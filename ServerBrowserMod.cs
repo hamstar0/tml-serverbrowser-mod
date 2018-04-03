@@ -28,8 +28,20 @@ namespace ServerBrowser {
 				this.Dialog = new UIServerBrowserDialog( new UITheme() );
 
 				MenuItem.AddMenuItem( "Browse Servers", -80, 12, delegate () {
-					Main.menuMode = 77777;
-					this.Dialog.Open();
+					Main.OpenPlayerSelect( plr_data => {
+						Main.ServerSideCharacter = false;
+						plr_data.SetAsActive();
+
+						Main.menuMode = 77777;
+						this.Dialog.Open();
+					} );
+					//Main.LoadPlayers();
+					//Main.menuMultiplayer = true;
+					//Main.PlaySound( 10, -1, -1, 1, 1f, 0f );
+					//Main.menuMode = 1;
+
+					//Main.menuMode = 77777;
+					//this.Dialog.Open();
 				} );
 				MenuItem.AddMenuItem( "Back", 272, 77777, delegate () {
 					Main.menuMode = 12;
