@@ -1,17 +1,3 @@
-Future
--	Implement server authentication
-	-	@B&D
-		-	Ping server IP and port (from hamstar.pw?)
-			-	@Info
-https://stackoverflow.com/questions/27218989/how-to-use-golang-to-compose-raw-tcp-packet-using-gopacket-and-send-it-via-raw
-		-	Implement OpenID authentication with steam
-			-	@Info
-				-	https://steamcommunity.com/dev
-				-	https://github.com/IdentityModel/IdentityModel.OidcClient2
-
-
-
-
 v1.0
 -	Normalize colors better
 -	Add sort
@@ -19,9 +5,11 @@ v1.0
 -	Add better mod listing
 -	Indicate passworded servers
 -	Filter private (non-port forwarded?) servers
+-	Fix timestamps
+-	Fix lag
+
 v0.9
 -	Implement server joining
-
 -	@Proof-of-work anti-spam (script-side)
 	-	@Plan: Generate a small hash code and have client brute-force its solution
 -	@HH max players, ping, etc.
