@@ -1,1 +1,1 @@
-Allows browsing and joining multiplayer tModLoader games from the main menu.
+Allows browsing and joining active multiplayer tModLoader games from the main menu.
