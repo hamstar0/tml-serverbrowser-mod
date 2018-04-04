@@ -8,6 +8,7 @@ namespace ServerBrowser {
 	class ServerBrowserEntry {
 		public string WorldName;
 		public string ServerIP;
+		public bool IsPassworded;
 		public string Motd;
 		public int Port;
 		public long Created;
@@ -22,10 +23,12 @@ namespace ServerBrowser {
 
 
 		public TimeSpan GetTimeSpan() {
-			long seconds = SystemHelpers.TimeStampInSeconds() - this.Created;
+			long now = SystemHelpers.TimeStampInSeconds();
+			long total_seconds = now - this.Created;
 
 			long max_seconds = 60 * 60 * 24 * 30;
-			if( seconds > max_seconds ) { seconds = max_seconds; } 
+			long seconds = total_seconds;
+			if( total_seconds > max_seconds ) { seconds = max_seconds; } 
 
 			long minutes = seconds / 60;
 			long hours = minutes / 60;
@@ -33,9 +36,7 @@ namespace ServerBrowser {
 			minutes -= ( hours * 60 );
 			seconds -= ( minutes * 60 ) + ( hours * 60 * 60 );
 
-			TimeSpan span = new TimeSpan();
-			span = new TimeSpan( (int)hours, (int)minutes, (int)seconds );
-
+			var span = new TimeSpan( (int)hours, (int)minutes, (int)seconds );
 			return span;
 		}
 	}

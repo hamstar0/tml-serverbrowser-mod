@@ -1,7 +1,7 @@
 author = hamstar
-version = 0.9.0
+version = 0.9.1
 displayName = Server Browser
-modReferences = HamstarHelpers@1.4.2.5
+modReferences = HamstarHelpers@1.4.2.6
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
 includePDB = true
 homepage = https://forums.terraria.org/index.php?threads/hamstars-helpers-a-modders-mod-for-mods-and-modding.63670/

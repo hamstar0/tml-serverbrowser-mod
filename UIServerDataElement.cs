@@ -3,9 +3,11 @@ using HamstarHelpers.NetHelpers;
 using HamstarHelpers.UIHelpers;
 using HamstarHelpers.UIHelpers.Elements;
 using HamstarHelpers.Utilities.Config;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -26,7 +28,7 @@ namespace ServerBrowser {
 		public static float MotdLabelTop = 24f;
 		 public static float IPLabelLeft = 0f;
 		public static float IPLabelTop = 24f;
-		public static float PlayerCountLabelLeft = 128f;
+		public static float PlayerCountLabelLeft = 136f;
 		public static float PlayerCountLabelTop = 24f;
 		public static float PlayerPvpCountLabelLeft = 256f;
 		public static float PlayerPvpCountLabelTop = 24f;
@@ -84,7 +86,7 @@ namespace ServerBrowser {
 
 			this.SetPadding( 4f );
 			this.Width.Set( 0f, 1f );
-			this.Height.Set( 64, 0f );
+			this.Height.Set( 64f, 0f );
 			
 			var world_label = new UIText( server_name );
 			world_label.Left.Set( UIServerDataElement.WorldLabelLeft, 0f );
@@ -120,6 +122,7 @@ namespace ServerBrowser {
 				this.Append( (UIElement)motd_label );
 
 				offset_y = 24f;
+				this.Height.Set( this.Height.Pixels + 24f, 0f );
 			}
 
 			////
@@ -168,6 +171,19 @@ namespace ServerBrowser {
 				NetHelpers.JoinServer( this.Data.ServerIP, this.Data.Port );
 			};
 			this.Append( (UIElement)join_button );
+
+			////
+
+			if( this.Data.IsPassworded && Main.itemTexture[327] != null ) {
+				Texture2D tex = Main.itemTexture[327];
+
+				var lock_icon = new UIImage( tex );
+				lock_icon.Top.Set( 18f, 0f );
+				lock_icon.Left.Set( -128f, 1f );
+				lock_icon.Width.Set( tex.Width, 0f );
+				lock_icon.Height.Set( tex.Height, 0f );
+				this.Append( (UIElement)lock_icon );
+			}
 		}
 
 

@@ -3,11 +3,12 @@ v1.0
 -	Add sort
 -	Add column labels
 -	Add better mod listing
+
+v0.9.1
 -	Indicate passworded servers
 -	Filter private (non-port forwarded?) servers
--	Fix timestamps
 -	Fix lag
-
+-	Fix timestamps
 v0.9
 -	Implement server joining
 -	@Proof-of-work anti-spam (script-side)
