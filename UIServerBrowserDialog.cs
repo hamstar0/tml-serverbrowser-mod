@@ -105,16 +105,16 @@ namespace ServerBrowser {
 				}
 			}
 
-			var modrecommend_url = new UIWebUrl( "Trouble picking mods?", "https://sites.google.com/site/terrariamodsuggestions/", true, 0.8f );
+			var modrecommend_url = new UIWebUrl( this.Theme, "Trouble choosing mods?", "https://sites.google.com/site/terrariamodsuggestions/", true, 0.86f );
 			modrecommend_url.Top.Set( -12f, 1f );
 			modrecommend_url.Left.Set( 0f, 0f );
-			modrecommend_url.Width.Set( 160f, 0f );
+			modrecommend_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)modrecommend_url );
 
-			var support_url = new UIWebUrl( "Support Server Browser!", "https://www.patreon.com/hamstar0", true, 0.8f );
+			var support_url = new UIWebUrl( this.Theme, "Support Server Browser!", "https://www.patreon.com/hamstar0", true, 0.86f );
 			support_url.Top.Set( -12f, 1f );
-			support_url.Left.Set( -160f, 1f );
-			support_url.Width.Set( 160f, 0f );
+			support_url.Left.Set( -172f, 1f );
+			support_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)support_url );
 
 			this.Theme.ApplyList( mod_list_panel );
@@ -137,12 +137,6 @@ namespace ServerBrowser {
 			Action<string> list_ready = delegate( string output ) {
 				UIServerDataElement[] list = UIServerDataElement.GetListFromJsonStr( this.Theme, output, (ip, port) => {
 					this.Close();
-
-					try {
-						NetHelpers.JoinServer( ip, port );
-					} catch( Exception e ) {
-						LogHelpers.Log( e.ToString() );
-					}
 				} );
 
 				if( list.Length > 0 ) {

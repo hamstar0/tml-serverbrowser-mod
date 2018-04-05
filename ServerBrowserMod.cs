@@ -25,7 +25,14 @@ namespace ServerBrowser {
 
 		public override void Load() {
 			if( !Main.dedServ ) {
-				this.Dialog = new UIServerBrowserDialog( new UITheme() );
+				var theme = new UITheme();
+				theme.UrlColor.R = (byte)((float)theme.UrlColor.R * 1.35f);
+				theme.UrlColor.G = (byte)( (float)theme.UrlColor.G * 1.35f );
+				theme.UrlLitColor.R = (byte)( (float)theme.UrlLitColor.R * 1.35f );
+				theme.UrlLitColor.G = (byte)( (float)theme.UrlLitColor.G * 1.35f );
+				theme.UrlVisitColor.G = (byte)( (float)theme.UrlVisitColor.G * 1.35f );
+
+				this.Dialog = new UIServerBrowserDialog( theme );
 
 				MenuItem.AddMenuItem( "Browse Servers", -80, 12, delegate () {
 					Main.OpenPlayerSelect( plr_data => {

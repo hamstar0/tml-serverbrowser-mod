@@ -1,9 +1,11 @@
 v1.0
--	Normalize colors better
+-	Add filter
 -	Add sort
 -	Add column labels
 -	Add better mod listing
 
+-	On server join, stop drawing the fucking dialog
+-	Improve event list
 v0.9.1
 -	Indicate passworded servers
 -	Filter private (non-port forwarded?) servers

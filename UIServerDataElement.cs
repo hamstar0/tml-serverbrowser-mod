@@ -16,7 +16,7 @@ namespace ServerBrowser {
 	class UIServerDataElement : UIPanel {
 		 public static float WorldLabelLeft = 0f;
 		public static float WorldLabelTop = 0f;
-		public static float UptimeLabelLeft = 160f;
+		public static float UptimeLabelLeft = 176f;
 		public static float UptimeLabelTop = 0f;
 		public static float PingLabelLeft = 288f;
 		public static float PingLabelTop = 0f;
@@ -40,14 +40,14 @@ namespace ServerBrowser {
 
 		////////////////
 
-		public static UIServerDataElement[] GetListFromJsonStr( UITheme theme, string json_str, Action<string, int> on_join ) {
+		public static UIServerDataElement[] GetListFromJsonStr( UITheme theme, string json_str, Action<string, int> pre_join ) {
 			try {
 				var data = JsonConfig<IDictionary<string, ServerBrowserEntry>>.Deserialize( json_str );
 				UIServerDataElement[] list = new UIServerDataElement[data.Count];
 
 				int i = 0;
 				foreach( var kv in data ) {
-					list[i++] = new UIServerDataElement( theme, kv.Value, on_join );
+					list[i++] = new UIServerDataElement( theme, kv.Value, pre_join );
 				}
 
 				return list;
@@ -64,15 +64,15 @@ namespace ServerBrowser {
 
 		private UITheme Theme;
 		public ServerBrowserEntry Data { get; private set; }
-		private Action<string, int> OnJoin;
+		private Action<string, int> PreJoinAction;
 
 
 		////////////////
 
-		public UIServerDataElement( UITheme theme, ServerBrowserEntry data, Action<string, int> on_join ) {
+		public UIServerDataElement( UITheme theme, ServerBrowserEntry data, Action<string, int> pre_join ) {
 			this.Theme = theme;
 			this.Data = data;
-			this.OnJoin = on_join;
+			this.PreJoinAction = pre_join;
 			
 			this.InitializeMe();
 		}
@@ -167,8 +167,13 @@ namespace ServerBrowser {
 			join_button.Width.Set( 128f, 0f );
 			join_button.Height.Set( 12f, 0f );
 			join_button.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
-				this.OnJoin( this.Data.ServerIP, this.Data.Port );
-				NetHelpers.JoinServer( this.Data.ServerIP, this.Data.Port );
+				this.PreJoinAction( this.Data.ServerIP, this.Data.Port );
+				
+				try {
+					NetHelpers.JoinServer( this.Data.ServerIP, this.Data.Port );
+				} catch( Exception e ) {
+					LogHelpers.Log( e.ToString() );
+				}
 			};
 			this.Append( (UIElement)join_button );
 
@@ -179,7 +184,7 @@ namespace ServerBrowser {
 
 				var lock_icon = new UIImage( tex );
 				lock_icon.Top.Set( 18f, 0f );
-				lock_icon.Left.Set( -128f, 1f );
+				lock_icon.Left.Set( -112f, 1f );
 				lock_icon.Width.Set( tex.Width, 0f );
 				lock_icon.Height.Set( tex.Height, 0f );
 				this.Append( (UIElement)lock_icon );
