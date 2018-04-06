@@ -12,7 +12,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 
-namespace ServerBrowser {
+namespace ServerBrowser.UI {
 	class UIServerDataElement : UIPanel {
 		 public static float WorldLabelLeft = 0f;
 		public static float WorldLabelTop = 0f;
@@ -183,8 +183,8 @@ namespace ServerBrowser {
 				Texture2D tex = Main.itemTexture[327];
 
 				var lock_icon = new UIImage( tex );
-				lock_icon.Top.Set( 18f, 0f );
-				lock_icon.Left.Set( -112f, 1f );
+				lock_icon.Top.Set( 17f, 0f );
+				lock_icon.Left.Set( -116f, 1f );
 				lock_icon.Width.Set( tex.Width, 0f );
 				lock_icon.Height.Set( tex.Height, 0f );
 				this.Append( (UIElement)lock_icon );

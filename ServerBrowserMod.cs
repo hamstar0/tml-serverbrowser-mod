@@ -2,6 +2,7 @@
 using HamstarHelpers.Utilities.Menu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ServerBrowser.UI;
 using Terraria;
 using Terraria.ModLoader;
 

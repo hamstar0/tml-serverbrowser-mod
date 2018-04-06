@@ -4,18 +4,24 @@ using HamstarHelpers.NetHelpers;
 using HamstarHelpers.UIHelpers;
 using HamstarHelpers.UIHelpers.Elements;
 using HamstarHelpers.Utilities.Menu;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 
-namespace ServerBrowser {
+namespace ServerBrowser.UI {
 	public class UIServerBrowserDialog : UIDialog {
+		private static object MyLock = new object();
+
+
 		private UITextPanelButton SortByNameButton;
 		private UITextPanelButton SortByPingButton;
 		private UITextPanelButton SortByPlayersButton;
 		private UITextField FilterByNameInput;
 		private UIList ServerList;
+
+		private UIServerModListPopup ModListPopup;
 
 
 		////////////////
@@ -117,6 +123,15 @@ namespace ServerBrowser {
 			support_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)support_url );
 
+			////
+
+			/*this.ModListPopup = new UIServerModListPopup( this.Theme );
+			this.ModListPopup.Top.Set( 0f, 0f );
+			this.ModListPopup.Left.Set( 0f, 0f );
+			this.Append( (UIElement)this.ModListPopup );*/
+
+			////
+
 			this.Theme.ApplyList( mod_list_panel );
 		}
 
@@ -129,10 +144,12 @@ namespace ServerBrowser {
 		////////////////
 
 		public void RefreshServerList() {
-			if( this.ServerList.Count > 0 ) {
-				this.ServerList.Clear();
-				this.ServerList.Recalculate();
-			}
+			//lock( UIServerBrowserDialog.MyLock ) {
+				if( this.ServerList.Count > 0 ) {
+					this.ServerList.Clear();
+					this.ServerList.Recalculate();
+				}
+			//}
 			
 			Action<string> list_ready = delegate( string output ) {
 				UIServerDataElement[] list = UIServerDataElement.GetListFromJsonStr( this.Theme, output, (ip, port) => {
@@ -140,8 +157,10 @@ namespace ServerBrowser {
 				} );
 
 				if( list.Length > 0 ) {
-					this.ServerList.AddRange( list );
-					this.Recalculate();
+					//lock( UIServerBrowserDialog.MyLock ) {
+						this.ServerList.AddRange( list );
+						this.Recalculate();
+					//}
 				}
 			};
 			Action<Exception, string> list_error = delegate ( Exception e, string output ) {
@@ -152,5 +171,24 @@ namespace ServerBrowser {
 			NetHelpers.MakeGetRequestAsync( "https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec",
 				list_ready, list_error );
 		}
+
+
+		////////////////
+
+		/*public override void Draw( SpriteBatch sb ) {
+			lock( UIServerBrowserDialog.MyLock ) {
+				base.Draw( sb );
+
+				if( this.ServerList != null ) {
+					foreach( UIElement item in this.ServerList._items ) {
+						if( item.IsMouseHovering ) {
+							var server_data_elem = (UIServerDataElement)item;
+
+							this.ModListPopup.SetServer( server_data_elem.Data );
+						}
+					}
+				}
+			}
+		}*/
 	}
 }

@@ -34,10 +34,11 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="UIServerBrowserDialog.cs" />
+    <Compile Include="UI\UIModListPopup.cs" />
+    <Compile Include="UI\UIServerBrowserDialog.cs" />
     <Compile Include="ServerBrowserMod.cs" />
     <Compile Include="ServerBrowserEntry.cs" />
-    <Compile Include="UIServerDataElement.cs" />
+    <Compile Include="UI\UIServerDataElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="HamstarHelpers">
