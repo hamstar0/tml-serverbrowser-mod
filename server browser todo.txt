@@ -1,9 +1,15 @@
 v1.0
--	Add filter
--	Add sort
--	Add column labels
--	Add better mod listing
+-	Add theme change button
+-	Add filters
+-	Add sorts
 
+v0.9.3
+-	Add column labels
+-	Fix resizing dialog
+v0.9.2
+-	Show icons on passworded servers
+-	Lock server list
+-	Add better mod listing
 -	On server join, stop drawing the fucking dialog
 -	Improve event list
 v0.9.1

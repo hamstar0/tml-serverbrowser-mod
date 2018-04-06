@@ -8,6 +8,12 @@ using Terraria.GameContent.UI.Elements;
 
 namespace ServerBrowser.UI {
 	class UIServerModListPopup : UIPanel {
+		public static int MaxModsPerColumn = 16;
+		public static int ColumnWidth = 160;
+		
+
+		////////////////
+
 		public UITheme Theme { get; private set; }
 		public ServerBrowserEntry CurrentEntry { get; private set; }
 
@@ -20,8 +26,8 @@ namespace ServerBrowser.UI {
 			this.Theme = theme;
 			this.CurrentEntry = null;
 
-			this.Width.Set( 128f, 0f );
-			this.Height.Set( 16f * 12f, 0f );
+			this.Width.Set( 176f, 0f );
+			this.Height.Set( (16f * UIServerModListPopup.MaxModsPerColumn) + 16f, 0f );
 
 			theme.ApplyPanel( this );
 		}
@@ -31,10 +37,14 @@ namespace ServerBrowser.UI {
 		public void SetServer( ServerBrowserEntry entry ) {
 			if( this.CurrentEntry != null && this.CurrentEntry.ServerIP == entry.ServerIP ) { return; }
 
+			int mod_count = entry.Mods.Count;
+			int columns = (mod_count / UIServerModListPopup.MaxModsPerColumn) + ((mod_count % UIServerModListPopup.MaxModsPerColumn) == 0 ? 0 : 1);
+			float width = (float)(columns * UIServerModListPopup.ColumnWidth);
+
 			this.CurrentEntry = entry;
 			this.LingerTime = 6;
 
-			this.Width.Set( ((entry.Mods.Count / 12) * 128), 0f );
+			this.Width.Set( width + 16f, 0f );
 		}
 
 
@@ -45,18 +55,23 @@ namespace ServerBrowser.UI {
 
 			base.Draw( sb );
 
-			float x = this.Top.Pixels;
-			float y = this.Left.Pixels;
+			float x = this.Left.Pixels + 8f;
+			float y = this.Top.Pixels + 8f;
 			int rows = 0;
 
 			foreach( var kv in this.CurrentEntry.Mods ) {
-				if( rows++ > 12 ) {
+				string mod_name = (kv.Key.Length > 19 ? kv.Key.Substring(0, 17)+"..." : kv.Key) + " " + kv.Value;
+
+				if( rows >= UIServerModListPopup.MaxModsPerColumn ) {
 					rows = 0;
-					x += 128f;
-					y = 0;
+					x += UIServerModListPopup.ColumnWidth;
+					y = this.Top.Pixels + 8f;
 				}
 
-				sb.DrawString( Main.fontMouseText, kv.Key + " " + kv.Value, new Vector2( x, y ), Color.White );
+				sb.DrawString( Main.fontMouseText, mod_name, new Vector2(x, y), Color.White, 0f, default(Vector2), 0.7f, SpriteEffects.None, 1f );
+
+				rows++;
+				y += 16f;
 			}
 
 			if( --this.LingerTime <= 0 ) {

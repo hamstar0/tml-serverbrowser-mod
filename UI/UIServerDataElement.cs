@@ -2,11 +2,8 @@
 using HamstarHelpers.NetHelpers;
 using HamstarHelpers.UIHelpers;
 using HamstarHelpers.UIHelpers.Elements;
-using HamstarHelpers.Utilities.Config;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -14,7 +11,7 @@ using Terraria.UI;
 
 namespace ServerBrowser.UI {
 	class UIServerDataElement : UIPanel {
-		 public static float WorldLabelLeft = 0f;
+		public static float WorldLabelLeft = 0f;
 		public static float WorldLabelTop = 0f;
 		public static float UptimeLabelLeft = 176f;
 		public static float UptimeLabelTop = 0f;
@@ -24,8 +21,6 @@ namespace ServerBrowser.UI {
 		public static float WorldProgressLabelTop = 0f;
 		public static float WorldEventLabelLeft = 536f;
 		public static float WorldEventLabelTop = 0f;
-		 public static float MotdLabelLeft = 0f;
-		public static float MotdLabelTop = 24f;
 		 public static float IPLabelLeft = 0f;
 		public static float IPLabelTop = 24f;
 		public static float PlayerCountLabelLeft = 136f;
@@ -36,43 +31,55 @@ namespace ServerBrowser.UI {
 		public static float TeamsCountLabelTop = 24f;
 		 public static float ModsLabelLeft = 0f;
 		public static float ModsLabelTop = 44f;
+		 public static float MotdLabelLeft = 0f;
+		public static float MotdLabelTop = 44f;
 
 
 		////////////////
 
-		public static UIServerDataElement[] GetListFromJsonStr( UITheme theme, string json_str, Action<string, int> pre_join ) {
-			try {
-				var data = JsonConfig<IDictionary<string, ServerBrowserEntry>>.Deserialize( json_str );
-				UIServerDataElement[] list = new UIServerDataElement[data.Count];
+		public static int CompareByWorldName( UIServerDataElement prev, UIServerDataElement next ) {
+			return prev.Data.WorldName.CompareTo( next.Data.WorldName );
+		}
 
-				int i = 0;
-				foreach( var kv in data ) {
-					list[i++] = new UIServerDataElement( theme, kv.Value, pre_join );
-				}
+		public static int CompareByPing( UIServerDataElement prev, UIServerDataElement next ) {
+			return prev.Data.AveragePing - next.Data.AveragePing;
+		}
 
-				return list;
-			} catch( Exception e ) {
-				int len = json_str.Length > 64 ? 64 : json_str.Length;
-				LogHelpers.Log( "GetListFromJsonStr - " + e.ToString() + " - " + json_str.Substring(0, len) );
+		public static int CompareByPlayerCount( UIServerDataElement prev, UIServerDataElement next ) {
+			int way = prev.Data.PlayerCount - next.Data.PlayerCount;
+
+			if( way == 0 ) {
+				way = prev.Data.MaxPlayerCount - next.Data.MaxPlayerCount;
+			}
+			if( way == 0 ) {
+				way = prev.Data.PlayerPvpCount - next.Data.PlayerPvpCount;
 			}
 
-			return new UIServerDataElement[0];
+			return way;
 		}
+
 
 
 		////////////////
 
 		private UITheme Theme;
 		public ServerBrowserEntry Data { get; private set; }
+
 		private Action<string, int> PreJoinAction;
+		private Func<UIServerDataElement, UIServerDataElement, int> Comparator;
 
 
 		////////////////
 
-		public UIServerDataElement( UITheme theme, ServerBrowserEntry data, Action<string, int> pre_join ) {
+		public UIServerDataElement( UITheme theme, ServerBrowserEntry data, Func<UIServerDataElement, UIServerDataElement, int> comparator,
+				Action<string, int> pre_join ) {
 			this.Theme = theme;
 			this.Data = data;
+
 			this.PreJoinAction = pre_join;
+			this.Comparator = comparator;
+
+			theme.ApplyPanel( this );
 			
 			this.InitializeMe();
 		}
@@ -80,13 +87,12 @@ namespace ServerBrowser.UI {
 
 		private void InitializeMe() {
 			var self = this;
-			string server_name = this.Data.WorldName.Substring( 0, this.Data.WorldName.Length > 32 ? 32 : this.Data.WorldName.Length );
-			float offset_y = 0f;
+			string server_name = this.Data.WorldName.Length > 20 ? this.Data.WorldName.Substring( 0, 18 ) + "..." : this.Data.WorldName;
 			TimeSpan uptime = this.Data.GetTimeSpan();
 
 			this.SetPadding( 4f );
 			this.Width.Set( 0f, 1f );
-			this.Height.Set( 64f, 0f );
+			this.Height.Set( 48f, 0f );
 			
 			var world_label = new UIText( server_name );
 			world_label.Left.Set( UIServerDataElement.WorldLabelLeft, 0f );
@@ -115,41 +121,29 @@ namespace ServerBrowser.UI {
 
 			////
 
-			if( this.Data.Motd != "" ) {
-				var motd_label = new UIText( this.Data.Motd, 0.8f );
-				motd_label.Left.Set( UIServerDataElement.MotdLabelLeft, 0f );
-				motd_label.Top.Set( UIServerDataElement.MotdLabelTop, 0f );
-				this.Append( (UIElement)motd_label );
-
-				offset_y = 24f;
-				this.Height.Set( this.Height.Pixels + 24f, 0f );
-			}
-
-			////
-
-			var ip_label = new UIText( this.Data.ServerIP + ":" + this.Data.Port, 0.8f );
+			var ip_label = new UIText( "IP: "+this.Data.ServerIP + ":" + this.Data.Port, 0.8f );
 			ip_label.Left.Set( UIServerDataElement.IPLabelLeft, 0f );
-			ip_label.Top.Set( UIServerDataElement.IPLabelTop + offset_y, 0f );
+			ip_label.Top.Set( UIServerDataElement.IPLabelTop, 0f );
 			this.Append( (UIElement)ip_label );
 
 			var player_count_label = new UIText( "Players: " + this.Data.PlayerCount+"/"+this.Data.MaxPlayerCount, 0.8f );
 			player_count_label.Left.Set( UIServerDataElement.PlayerCountLabelLeft, 0f );
-			player_count_label.Top.Set( UIServerDataElement.PlayerCountLabelTop + offset_y, 0f );
+			player_count_label.Top.Set( UIServerDataElement.PlayerCountLabelTop, 0f );
 			this.Append( (UIElement)player_count_label );
 
 			var player_pvp_count_label = new UIText( "PVPers: " + this.Data.PlayerPvpCount+"/"+this.Data.PlayerCount, 0.8f );
 			player_pvp_count_label.Left.Set( UIServerDataElement.PlayerPvpCountLabelLeft, 0f );
-			player_pvp_count_label.Top.Set( UIServerDataElement.PlayerPvpCountLabelTop + offset_y, 0f );
+			player_pvp_count_label.Top.Set( UIServerDataElement.PlayerPvpCountLabelTop, 0f );
 			this.Append( (UIElement)player_pvp_count_label );
 
 			var teams_count_label = new UIText( "Teams: " + this.Data.TeamsCount, 0.8f );
 			teams_count_label.Left.Set( UIServerDataElement.TeamsCountLabelLeft, 0f );
-			teams_count_label.Top.Set( UIServerDataElement.TeamsCountLabelTop + offset_y, 0f );
+			teams_count_label.Top.Set( UIServerDataElement.TeamsCountLabelTop, 0f );
 			this.Append( (UIElement)teams_count_label );
 
 			////
 
-			string[] mod_list = this.Data.Mods.Select( kv => kv.Key + " " + kv.Value )
+			/*string[] mod_list = this.Data.Mods.Select( kv => kv.Key + " " + kv.Value )
 				.OrderBy(k=>k)
 				.ToArray();
 
@@ -157,7 +151,18 @@ namespace ServerBrowser.UI {
 			mods.Left.Set( UIServerDataElement.ModsLabelLeft, 0f );
 			mods.Top.Set( UIServerDataElement.ModsLabelTop + offset_y, 0f );
 			mods.Width.Set( 0f, 1f );
-			this.Append( (UIElement)mods );
+			this.Append( (UIElement)mods );*/
+
+			////
+
+			if( this.Data.Motd != "" ) {
+				var motd_label = new UIText( this.Data.Motd, 0.8f );
+				motd_label.Left.Set( UIServerDataElement.MotdLabelLeft, 0f );
+				motd_label.Top.Set( UIServerDataElement.MotdLabelTop, 0f );
+				this.Append( (UIElement)motd_label );
+				
+				this.Height.Set( this.Height.Pixels + 24f, 0f );
+			}
 
 			////
 
@@ -195,9 +200,7 @@ namespace ServerBrowser.UI {
 		////////////////
 
 		public override int CompareTo( object obj ) {
-			var data_obj = (UIServerDataElement)obj;
-
-			return this.Data.WorldName.CompareTo( data_obj.Data.WorldName );
+			return this.Comparator( this, (UIServerDataElement)obj );
 		}
 	}
 }

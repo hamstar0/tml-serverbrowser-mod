@@ -27,15 +27,13 @@ namespace ServerBrowser {
 		public override void Load() {
 			if( !Main.dedServ ) {
 				var theme = new UITheme();
-				theme.UrlColor.R = (byte)((float)theme.UrlColor.R * 1.35f);
-				theme.UrlColor.G = (byte)( (float)theme.UrlColor.G * 1.35f );
-				theme.UrlLitColor.R = (byte)( (float)theme.UrlLitColor.R * 1.35f );
-				theme.UrlLitColor.G = (byte)( (float)theme.UrlLitColor.G * 1.35f );
-				theme.UrlVisitColor.G = (byte)( (float)theme.UrlVisitColor.G * 1.35f );
-
+				theme.UrlColor = Color.Lerp( theme.UrlColor, Color.White, 0.5f );
+				theme.UrlLitColor = Color.Lerp( theme.UrlLitColor, Color.White, 0.5f );
+				theme.UrlVisitColor = Color.Lerp( theme.UrlVisitColor, Color.White, 0.5f );
+				
 				this.Dialog = new UIServerBrowserDialog( theme );
 
-				MenuItem.AddMenuItem( "Browse Servers", -80, 12, delegate () {
+				MenuItem.AddMenuItem( "Browse Servers", MenuItem.MenuTopPos - 80, 12, delegate () {
 					Main.OpenPlayerSelect( plr_data => {
 						Main.ServerSideCharacter = false;
 						plr_data.SetAsActive();
@@ -51,17 +49,20 @@ namespace ServerBrowser {
 					//Main.menuMode = 77777;
 					//this.Dialog.Open();
 				} );
-				MenuItem.AddMenuItem( "Back", 272, 77777, delegate () {
+
+				MenuItem.AddMenuItem( "Back", -78, 77777, delegate () {
 					Main.menuMode = 12;
 					this.Dialog.Close();
 				} );
-			}
 
-			Main.OnPostDraw += this.DrawBrowser;
+				Main.OnPostDraw += this.DrawBrowser;
+			}
 		}
 
 		public override void Unload() {
-			Main.OnPostDraw -= this.DrawBrowser;
+			if( !Main.dedServ ) {
+				Main.OnPostDraw -= this.DrawBrowser;
+			}
 		}
 
 		////////////////
