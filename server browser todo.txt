@@ -1,8 +1,8 @@
 v1.0
 -	Add theme change button
+
 -	Add filters
 -	Add sorts
-
 v0.9.3
 -	Add column labels
 -	Fix resizing dialog

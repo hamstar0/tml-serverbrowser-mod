@@ -91,7 +91,7 @@ namespace ServerBrowser.UI {
 			this.FilterByModInput.Height.Set( 32f, 0f );
 			this.FilterByModInput.PaddingTop += 4f;
 			this.FilterByModInput.OnTextChange += delegate ( object sender, EventArgs e ) {
-				this.FilterServerListByMod();
+				this.FilterServerListByMod( ((TextInputEventArgs)e).Text );
 			};
 			this.InnerContainer.Append( (UIElement)this.FilterByModInput );
 
@@ -102,7 +102,7 @@ namespace ServerBrowser.UI {
 			this.FilterByNameInput.Height.Pixels = 32f;
 			this.FilterByNameInput.PaddingTop += 4f;
 			this.FilterByNameInput.OnTextChange += delegate( object sender, EventArgs e ) {
-				this.FilterServerListByText();
+				this.FilterServerListByText( ((TextInputEventArgs)e).Text );
 			};
 			this.InnerContainer.Append( (UIElement)this.FilterByNameInput );
 
@@ -177,8 +177,11 @@ namespace ServerBrowser.UI {
 			if( this.LastSeenScreenWidth != Main.screenWidth || this.LastSeenScreenHeight != Main.screenHeight ) {
 				this.LastSeenScreenWidth = Main.screenWidth;
 				this.LastSeenScreenHeight = Main.screenHeight;
+
 				this.RecalculateMe();
 			}
+
+			base.Draw( sb );
 		}
 	}
 }

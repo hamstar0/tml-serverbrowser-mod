@@ -42,17 +42,20 @@ namespace ServerBrowser.UI {
 		}
 
 		public static int CompareByPing( UIServerDataElement prev, UIServerDataElement next ) {
-			return prev.Data.AveragePing - next.Data.AveragePing;
+			return next.Data.AveragePing - prev.Data.AveragePing;
 		}
 
-		public static int CompareByPlayerCount( UIServerDataElement prev, UIServerDataElement next ) {
-			int way = prev.Data.PlayerCount - next.Data.PlayerCount;
+		public static int CompareByPlayers( UIServerDataElement prev, UIServerDataElement next ) {
+			int way = next.Data.PlayerCount - prev.Data.PlayerCount;
 
 			if( way == 0 ) {
-				way = prev.Data.MaxPlayerCount - next.Data.MaxPlayerCount;
+				way = next.Data.MaxPlayerCount - prev.Data.MaxPlayerCount;
 			}
 			if( way == 0 ) {
-				way = prev.Data.PlayerPvpCount - next.Data.PlayerPvpCount;
+				way = next.Data.TeamsCount - prev.Data.TeamsCount;
+			}
+			if( way == 0 ) {
+				way = next.Data.PlayerPvpCount - prev.Data.PlayerPvpCount;
 			}
 
 			return way;

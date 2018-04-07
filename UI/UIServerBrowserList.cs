@@ -5,6 +5,7 @@ using HamstarHelpers.Utilities.Config;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -44,8 +45,11 @@ namespace ServerBrowser.UI {
 		private UITheme Theme;
 		private UIList MyList;
 
+		public ICollection<UIServerDataElement> FullServerList;
+
 		private UIServerModListPopup ModListPopup;
-		private Func<UIServerDataElement, UIServerDataElement, int> DefaultComparator;
+		
+		public Func<UIServerDataElement, UIServerDataElement, int> DefaultComparator { get; internal set; }
 
 
 		////////////////
@@ -89,6 +93,17 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
+		public void RenderList( ICollection<UIServerDataElement> list ) {
+			lock( UIServerBrowserList.MyLock ) {
+				if( this.MyList.Count > 0 ) {
+					this.MyList.Clear();
+					this.MyList.AddRange( list );
+					this.MyList.Recalculate();
+				}
+			}
+		}
+
+
 		public void RefreshServerList( Action<string, int> pre_join ) {
 			lock( UIServerBrowserList.MyLock ) {
 				if( this.MyList.Count > 0 ) {
@@ -98,11 +113,11 @@ namespace ServerBrowser.UI {
 			}
 
 			Action<string> list_ready = delegate ( string output ) {
-				UIServerDataElement[] list = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join );
-
-				if( list.Length > 0 ) {
+				this.FullServerList = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join );
+				
+				if( this.FullServerList.Count > 0 ) {
 					lock( UIServerBrowserList.MyLock ) {
-						this.MyList.AddRange( list );
+						this.MyList.AddRange( this.FullServerList );
 						this.Recalculate();
 					}
 				}
@@ -120,13 +135,22 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
+		internal void UpdateOrder() {
+			this.MyList.UpdateOrder();
+		}
+
 		private int Comparator( UIServerDataElement prev, UIServerDataElement next ) {
 			return this.DefaultComparator( prev, next );
 		}
 
+		////////////////
 
-		public void SetComparator() {
+		public void Filter( Func<UIServerDataElement, bool> filter ) {
+			IList<UIServerDataElement> new_list = new List<UIServerDataElement>(
+				this.FullServerList.Where( elem => { return filter( elem ); } )
+			);
 
+			this.RenderList( new_list );
 		}
 
 

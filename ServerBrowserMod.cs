@@ -1,8 +1,10 @@
-﻿using HamstarHelpers.UIHelpers;
+﻿using HamstarHelpers.DebugHelpers;
+using HamstarHelpers.UIHelpers;
 using HamstarHelpers.Utilities.Menu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ServerBrowser.UI;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
