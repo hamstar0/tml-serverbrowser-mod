@@ -66,6 +66,8 @@ namespace ServerBrowser.UI {
 		////////////////
 
 		private UITheme Theme;
+		private UITextPanelButton JoinButton;
+
 		public ServerBrowserEntry Data { get; private set; }
 
 		private Action<string, int> PreJoinAction;
@@ -81,10 +83,10 @@ namespace ServerBrowser.UI {
 
 			this.PreJoinAction = pre_join;
 			this.Comparator = comparator;
-
-			theme.ApplyPanel( this );
 			
 			this.InitializeMe();
+
+			this.RefreshTheme();
 		}
 
 
@@ -169,12 +171,12 @@ namespace ServerBrowser.UI {
 
 			////
 
-			var join_button = new UITextPanelButton( this.Theme, "Join" );
-			join_button.Top.Set( 16f, 0f );
-			join_button.Left.Set( -128f, 1f );
-			join_button.Width.Set( 128f, 0f );
-			join_button.Height.Set( 12f, 0f );
-			join_button.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
+			this.JoinButton = new UITextPanelButton( this.Theme, "Join" );
+			this.JoinButton.Top.Set( 16f, 0f );
+			this.JoinButton.Left.Set( -128f, 1f );
+			this.JoinButton.Width.Set( 128f, 0f );
+			this.JoinButton.Height.Set( 12f, 0f );
+			this.JoinButton.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
 				this.PreJoinAction( this.Data.ServerIP, this.Data.Port );
 				
 				try {
@@ -183,7 +185,7 @@ namespace ServerBrowser.UI {
 					LogHelpers.Log( e.ToString() );
 				}
 			};
-			this.Append( (UIElement)join_button );
+			this.Append( (UIElement)this.JoinButton );
 
 			////
 
@@ -204,6 +206,14 @@ namespace ServerBrowser.UI {
 
 		public override int CompareTo( object obj ) {
 			return this.Comparator( this, (UIServerDataElement)obj );
+		}
+
+
+		////////////////
+
+		public void RefreshTheme() {
+			this.Theme.ApplyPanel( this );
+			this.JoinButton.RefreshTheme();
 		}
 	}
 }

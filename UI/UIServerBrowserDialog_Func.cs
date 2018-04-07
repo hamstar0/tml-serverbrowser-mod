@@ -1,5 +1,5 @@
-﻿using HamstarHelpers.UIHelpers.Elements;
-using System.Collections.Generic;
+﻿using HamstarHelpers.DebugHelpers;
+using HamstarHelpers.UIHelpers.Elements;
 
 
 namespace ServerBrowser.UI {
@@ -21,6 +21,11 @@ namespace ServerBrowser.UI {
 
 
 		public void FilterServerListByMod( string mod_text ) {
+			if( mod_text == "" ) {
+				this.ServerList.Unfilter();
+				return;
+			}
+
 			string mod_text_lower = mod_text.ToLower();
 
 			this.ServerList.Filter( elem => {
@@ -34,11 +39,18 @@ namespace ServerBrowser.UI {
 		}
 
 		public void FilterServerListByText( string text ) {
+			if( text == "" ) {
+				this.ServerList.Unfilter();
+				return;
+			}
+
+			string text_lower = text.ToLower();
+
 			this.ServerList.Filter( elem => {
-				if( elem.Data.WorldName.ToLower().Contains(text) ) {
+				if( elem.Data.WorldName.ToLower().Contains( text_lower ) ) {
 					return true;
 				}
-				if( elem.Data.Motd.ToLower().Contains( text ) ) {
+				if( elem.Data.Motd.ToLower().Contains( text_lower ) ) {
 					return true;
 				}
 				return false;

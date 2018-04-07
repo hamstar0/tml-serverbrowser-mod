@@ -12,6 +12,8 @@ using Terraria.UI;
 
 namespace ServerBrowser.UI {
 	partial class UIServerBrowserDialog : UIDialog {
+		private UITextPanel<string> Header;
+
 		private UITextPanelButton SortByNameButton;
 		private UITextPanelButton SortByPingButton;
 		private UITextPanelButton SortByPlayersButton;
@@ -35,6 +37,7 @@ namespace ServerBrowser.UI {
 
 		public override void InitializeComponents() {
 			var self = this;
+			var self_theme = this.Theme.Clone();
 
 			this.OuterContainer.Height.Set( -256, 1f );
 			this.OuterContainer.MaxHeight.Set( -256, 1f );
@@ -44,13 +47,36 @@ namespace ServerBrowser.UI {
 
 			////
 
-			var title = new UITextPanel<string>( "Server Browser", 0.8f, true );
-			title.HAlign = 0.5f;
-			title.Top.Set( -35f, 0f );
-			title.SetPadding( 15f );
-			this.OuterContainer.Append( (UIElement)title );
+			this.Header = new UITextPanel<string>( "Server Browser", 0.8f, true );
+			this.Header.HAlign = 0.5f;
+			this.Header.Top.Set( -35f, 0f );
+			this.Header.SetPadding( 15f );
+			this.OuterContainer.Append( (UIElement)this.Header );
 
-			this.Theme.ApplyHeader( title );
+			this.Theme.ApplyHeader( this.Header );
+
+			////
+
+			var theme_button_theme = UITheme.Vanilla.Clone();
+			var theme_button = new UITextPanelButton( theme_button_theme, "R", 0.8f );
+			theme_button.Top.Set( -8f, 0f );
+			theme_button.Left.Set( -12f, 1f );
+			theme_button.Width.Set( 16f, 0f );
+			theme_button.Height.Set( 16f, 0f );
+			theme_button.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
+				if( theme_button.Text == "R" ) {
+					theme_button.SetText( "B" );
+					this.Theme.Switch( UITheme.Vanilla );
+					theme_button_theme.Switch( self_theme );
+				} else {
+					theme_button.SetText( "R" );
+					this.Theme.Switch( self_theme );
+					theme_button_theme.Switch( UITheme.Vanilla );
+				}
+				theme_button.RefreshTheme();
+				this.RefreshTheme();
+			};
+			this.InnerContainer.Append( (UIElement)theme_button );
 
 			////
 
@@ -138,7 +164,7 @@ namespace ServerBrowser.UI {
 			this.ServerList = new UIServerBrowserList( this.Theme );
 			this.ServerList.Top.Set( 60f, 0f );
 			this.ServerList.Width.Set( 0f, 1f );
-			this.ServerList.Height.Set( -90f, 1f );
+			this.ServerList.Height.Set( -74f, 1f );
 			this.ServerList.HAlign = 0f;
 			this.ServerList.SetPadding( 4f );
 			this.ServerList.PaddingTop = 0.0f;
@@ -172,7 +198,22 @@ namespace ServerBrowser.UI {
 
 
 		////////////////
+
+		public override void RefreshTheme() {
+			base.RefreshTheme();
+
+			this.Theme.ApplyHeader( this.Header );
+
+			this.SortByNameButton.RefreshTheme();
+			this.SortByPingButton.RefreshTheme();
+			this.SortByPlayersButton.RefreshTheme();
+			this.FilterByModInput.RefreshTheme();
+			this.FilterByNameInput.RefreshTheme();
+			this.ServerList.RefreshTheme();
+		}
 		
+		////////////////
+
 		public override void Draw( SpriteBatch sb ) {
 			if( this.LastSeenScreenWidth != Main.screenWidth || this.LastSeenScreenHeight != Main.screenHeight ) {
 				this.LastSeenScreenWidth = Main.screenWidth;

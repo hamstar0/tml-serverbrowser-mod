@@ -44,20 +44,16 @@ namespace ServerBrowser.UI {
 
 		private UITheme Theme;
 		private UIList MyList;
-
-		public ICollection<UIServerDataElement> FullServerList;
-
 		private UIServerModListPopup ModListPopup;
-		
 		public Func<UIServerDataElement, UIServerDataElement, int> DefaultComparator { get; internal set; }
+
+		private ICollection<UIServerDataElement> FullServerList = new List<UIServerDataElement>();
 
 
 		////////////////
 
 		public UIServerBrowserList( UITheme theme ) : base() {
 			this.Theme = theme;
-
-			theme.ApplyList( this );
 
 			////
 
@@ -88,6 +84,8 @@ namespace ServerBrowser.UI {
 			////
 
 			this.DefaultComparator = UIServerDataElement.CompareByWorldName;
+
+			this.RefreshTheme();
 		}
 
 
@@ -97,9 +95,10 @@ namespace ServerBrowser.UI {
 			lock( UIServerBrowserList.MyLock ) {
 				if( this.MyList.Count > 0 ) {
 					this.MyList.Clear();
-					this.MyList.AddRange( list );
-					this.MyList.Recalculate();
 				}
+
+				this.MyList.AddRange( list );
+				this.MyList.Recalculate();
 			}
 		}
 
@@ -149,8 +148,27 @@ namespace ServerBrowser.UI {
 			IList<UIServerDataElement> new_list = new List<UIServerDataElement>(
 				this.FullServerList.Where( elem => { return filter( elem ); } )
 			);
-
+			
 			this.RenderList( new_list );
+		}
+
+		public void Unfilter() {
+			this.RenderList( this.FullServerList );
+		}
+
+
+		////////////////
+
+		public void RefreshTheme() {
+			this.Theme.ApplyList( this );
+			this.Theme.ApplyPanel( this.ModListPopup );
+
+			lock( UIServerBrowserList.MyLock ) {
+				foreach( UIElement item in this.FullServerList ) {
+					var server_data_elem = (UIServerDataElement)item;
+					server_data_elem.RefreshTheme();
+				}
+			}
 		}
 
 
