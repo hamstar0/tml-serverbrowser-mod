@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -20,23 +19,25 @@ namespace ServerBrowser.UI {
 
 		public static UIServerDataElement[] GetListFromJsonStr( UITheme theme, string json_str,
 				Func<UIServerDataElement, UIServerDataElement, int> comparator,
-				Action<string, int> pre_join ) {
+				Action<string, int> pre_join, Action on_err ) {
+			UIServerDataElement[] list = new UIServerDataElement[0];
+
 			try {
 				var data = JsonConfig<IDictionary<string, ServerBrowserEntry>>.Deserialize( json_str );
-				UIServerDataElement[] list = new UIServerDataElement[data.Count];
+				list = new UIServerDataElement[data.Count];
 
 				int i = 0;
 				foreach( var kv in data ) {
 					list[i++] = new UIServerDataElement( theme, kv.Value, comparator, pre_join );
 				}
-
-				return list;
 			} catch( Exception e ) {
 				int len = json_str.Length > 64 ? 64 : json_str.Length;
 				LogHelpers.Log( "GetListFromJsonStr - " + e.ToString() + " - " + json_str.Substring( 0, len ) );
+
+				on_err();
 			}
 
-			return new UIServerDataElement[0];
+			return list;
 		}
 
 
@@ -96,14 +97,13 @@ namespace ServerBrowser.UI {
 				if( this.MyList.Count > 0 ) {
 					this.MyList.Clear();
 				}
-
 				this.MyList.AddRange( list );
-				this.MyList.Recalculate();
 			}
+			this.MyList.Recalculate();
 		}
 
 
-		public void RefreshServerList( Action<string, int> pre_join ) {
+		public void RefreshServerList( Action<string, int> pre_join, Action on_success, Action on_err ) {
 			lock( UIServerBrowserList.MyLock ) {
 				if( this.MyList.Count > 0 ) {
 					this.MyList.Clear();
@@ -112,7 +112,7 @@ namespace ServerBrowser.UI {
 			}
 
 			Action<string> list_ready = delegate ( string output ) {
-				this.FullServerList = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join );
+				this.FullServerList = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join, on_err );
 				
 				if( this.FullServerList.Count > 0 ) {
 					lock( UIServerBrowserList.MyLock ) {
@@ -120,6 +120,7 @@ namespace ServerBrowser.UI {
 						this.Recalculate();
 					}
 				}
+				on_success();
 			};
 
 			Action<Exception, string> list_error = delegate ( Exception e, string output ) {
@@ -135,7 +136,9 @@ namespace ServerBrowser.UI {
 		////////////////
 
 		internal void UpdateOrder() {
-			this.MyList.UpdateOrder();
+			lock( UIServerBrowserList.MyLock ) {
+				this.MyList.UpdateOrder();
+			}
 		}
 
 		private int Comparator( UIServerDataElement prev, UIServerDataElement next ) {
@@ -187,14 +190,7 @@ namespace ServerBrowser.UI {
 					var server_data_elem = (UIServerDataElement)item;
 
 					this.ModListPopup.SetServer( server_data_elem.Data );
-
-					CalculatedStyle dim = this.ModListPopup.GetDimensions();
-					float top = Main.mouseY + 16f;
-					float left = Main.mouseX - ( dim.Width * 0.5f );
-
-					this.ModListPopup.Top.Set( top, 0f );
-					this.ModListPopup.Left.Set( left, 0f );
-					this.ModListPopup.Recalculate();
+					break;
 				}
 
 				if( is_hovering_server ) {

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-
+using Terraria.UI;
 
 namespace ServerBrowser.UI {
 	class UIServerModListPopup : UIPanel {
@@ -50,8 +50,26 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
+		public void UpdatePosition() {
+			CalculatedStyle dim = this.GetDimensions();
+			float top = Main.mouseY + 16f;
+			float left = Main.mouseX - ( dim.Width * 0.5f );
+
+			if( ( top + this.Height.Pixels ) > Main.screenHeight ) {
+				top = Main.screenHeight - dim.Height;
+				left = (Main.mouseX - 16f) - dim.Width;
+			}
+
+			this.Top.Set( top, 0f );
+			this.Left.Set( left, 0f );
+			this.Recalculate();
+		}
+
+
 		public override void Draw( SpriteBatch sb ) {
 			if( this.CurrentEntry == null ) { return; }
+
+			this.UpdatePosition();
 
 			base.Draw( sb );
 

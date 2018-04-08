@@ -61,6 +61,26 @@ namespace ServerBrowser.UI {
 			return way;
 		}
 
+		////////////////
+
+		public static string[] GetMotdLines( string motd, int line_width ) {
+			string[] motd_chunks;
+
+			if( motd.Length > line_width ) {
+				int chunks = (int)Math.Ceiling( (float)motd.Length / (float)line_width );
+
+				motd_chunks = new string[chunks];
+				for( int i = 0; i < motd_chunks.Length; i++ ) {
+					int width = ( i + 1 ) * line_width <= motd.Length ? line_width : motd.Length - ( i * line_width );
+					motd_chunks[i] = motd.Substring( i * line_width, width );
+				}
+			} else {
+				motd_chunks = new string[] { motd };
+			}
+
+			return motd_chunks;
+		}
+
 
 
 		////////////////
@@ -161,12 +181,18 @@ namespace ServerBrowser.UI {
 			////
 
 			if( this.Data.Motd != "" ) {
-				var motd_label = new UIText( this.Data.Motd, 0.8f );
-				motd_label.Left.Set( UIServerDataElement.MotdLabelLeft, 0f );
-				motd_label.Top.Set( UIServerDataElement.MotdLabelTop, 0f );
-				this.Append( (UIElement)motd_label );
+				int line_height = 24;
+				string[] motd_chunks = UIServerDataElement.GetMotdLines( this.Data.Motd, 96 );
+
+				for( int i=0; i<motd_chunks.Length; i++ ) {
+//LogHelpers.Log( "motd "+i+" "+motd_chunks[i]+", "+ ( i * 24f )+" - "+(line_height * motd_chunks.Length) );
+					var motd_label = new UIText( motd_chunks[i], 0.8f );
+					motd_label.Left.Set( UIServerDataElement.MotdLabelLeft, 0f );
+					motd_label.Top.Set( UIServerDataElement.MotdLabelTop + (i * line_height ), 0f );
+					this.Append( (UIElement)motd_label );
+				}
 				
-				this.Height.Set( this.Height.Pixels + 24f, 0f );
+				this.Height.Set( this.Height.Pixels + (line_height * motd_chunks.Length), 0f );
 			}
 
 			////

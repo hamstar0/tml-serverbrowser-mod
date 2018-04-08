@@ -19,6 +19,7 @@ namespace ServerBrowser.UI {
 		private UITextPanelButton SortByPlayersButton;
 		private UITextField FilterByModInput;
 		private UITextField FilterByNameInput;
+		private UIText ServerListErr;
 
 		private UIServerBrowserList ServerList;
 		
@@ -92,7 +93,7 @@ namespace ServerBrowser.UI {
 
 			this.SortByPingButton = new UITextPanelButton( this.Theme, "Sort by ping", 1.2f );
 			this.SortByPingButton.Top.Set( 12f, 0f );
-			this.SortByPingButton.Left.Set( 128f + 8f, 0f );
+			this.SortByPingButton.Left.Set( 128f + 12f, 0f );
 			this.SortByPingButton.Width.Set( 128f, 0f );
 			this.SortByPingButton.Height.Set( 32f, 0f );
 			this.SortByPingButton.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
@@ -171,6 +172,11 @@ namespace ServerBrowser.UI {
 			this.ServerList.Initialize();
 			this.InnerContainer.Append( (UIElement)this.ServerList );
 
+			this.ServerListErr = new UIText( "", 1f );
+			this.ServerListErr.Top.Set( 60f, 0f );
+			this.ServerListErr.Left.Set( -128, 0.5f );
+			this.InnerContainer.Append( (UIElement)this.ServerListErr );
+			
 			////
 
 			var modrecommend_url = new UIWebUrl( this.Theme, "Trouble choosing mods?", "https://sites.google.com/site/terrariamodsuggestions/", true, 0.86f );
@@ -192,8 +198,16 @@ namespace ServerBrowser.UI {
 				this.Close();
 			};
 
+			Action on_success = () => {
+				this.ServerListErr.SetText( "" );
+			};
+
+			Action on_err = () => {
+				this.ServerListErr.SetText( "Server busy. Try again later." );
+			};
+
 			base.OnActivate();
-			this.ServerList.RefreshServerList( pre_join );
+			this.ServerList.RefreshServerList( pre_join, on_success, on_err );
 		}
 
 

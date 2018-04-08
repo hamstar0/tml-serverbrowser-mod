@@ -4,6 +4,7 @@ using HamstarHelpers.Utilities.Menu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ServerBrowser.UI;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -68,12 +69,21 @@ namespace ServerBrowser {
 
 		////////////////
 
+		private bool HasErrored = false;
+
 		private void DrawBrowser( GameTime game_time ) {
 			if( !Main.gameMenu ) { return; }
 			
 			Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix );
 
-			this.Dialog.Draw( Main.spriteBatch );
+			try {
+				this.Dialog.Draw( Main.spriteBatch );
+			} catch( Exception e ) {
+				if( !this.HasErrored ) {
+					this.HasErrored = true;
+					LogHelpers.Log( e.ToString() );
+				}
+			}
 
 			Vector2 bonus = Main.DrawThickCursor( false );
 			Main.DrawCursor( bonus, false );
