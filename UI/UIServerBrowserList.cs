@@ -98,8 +98,8 @@ namespace ServerBrowser.UI {
 					this.MyList.Clear();
 				}
 				this.MyList.AddRange( list );
+				this.MyList.Recalculate();
 			}
-			this.MyList.Recalculate();
 		}
 
 

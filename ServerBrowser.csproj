@@ -34,6 +34,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="UI\UIServerBrowserDialog_Init.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Func.cs" />
     <Compile Include="UI\UIServerBrowserList.cs" />
     <Compile Include="UI\UIServerModListPopup.cs" />
