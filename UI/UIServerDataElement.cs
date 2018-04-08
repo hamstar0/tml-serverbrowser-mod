@@ -181,7 +181,7 @@ namespace ServerBrowser.UI {
 			////
 
 			if( this.Data.Motd != "" ) {
-				int line_height = 24;
+				int line_height = 16;
 				string[] motd_chunks = UIServerDataElement.GetMotdLines( this.Data.Motd, 96 );
 
 				for( int i=0; i<motd_chunks.Length; i++ ) {
@@ -192,7 +192,7 @@ namespace ServerBrowser.UI {
 					this.Append( (UIElement)motd_label );
 				}
 				
-				this.Height.Set( this.Height.Pixels + (line_height * motd_chunks.Length), 0f );
+				this.Height.Set( this.Height.Pixels + (line_height * motd_chunks.Length) + (motd_chunks.Length > 0 ? 4 : 0), 0f );
 			}
 
 			////

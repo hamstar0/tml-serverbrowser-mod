@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
 
 
 namespace ServerBrowser.UI {
@@ -50,7 +49,7 @@ namespace ServerBrowser.UI {
 			};
 
 			base.OnActivate();
-			this.ServerList.RefreshServerList( pre_join, on_success, on_err );
+			this.ServerList.RefreshServerList_Yielding( pre_join, on_success, on_err );
 		}
 
 
@@ -66,7 +65,7 @@ namespace ServerBrowser.UI {
 			this.SortByPlayersButton.RefreshTheme();
 			this.FilterByModInput.RefreshTheme();
 			this.FilterByNameInput.RefreshTheme();
-			this.ServerList.RefreshTheme();
+			this.ServerList.RefreshTheme_Yielding();
 		}
 		
 		////////////////

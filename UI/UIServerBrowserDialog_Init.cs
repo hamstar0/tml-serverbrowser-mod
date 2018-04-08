@@ -33,18 +33,18 @@ namespace ServerBrowser.UI {
 			////
 
 			var theme_button_theme = UITheme.Vanilla.Clone();
-			var theme_button = new UITextPanelButton( theme_button_theme, "R", 0.8f );
+			var theme_button = new UITextPanelButton( theme_button_theme, "B", 0.8f );
 			theme_button.Top.Set( -8f, 0f );
 			theme_button.Left.Set( -12f, 1f );
 			theme_button.Width.Set( 16f, 0f );
 			theme_button.Height.Set( 16f, 0f );
 			theme_button.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
-				if( theme_button.Text == "R" ) {
-					theme_button.SetText( "B" );
+				if( theme_button.Text == "B" ) {
+					theme_button.SetText( "R" );
 					this.Theme.Switch( UITheme.Vanilla );
 					theme_button_theme.Switch( self_theme );
 				} else {
-					theme_button.SetText( "R" );
+					theme_button.SetText( "B" );
 					this.Theme.Switch( self_theme );
 					theme_button_theme.Switch( UITheme.Vanilla );
 				}
@@ -77,7 +77,7 @@ namespace ServerBrowser.UI {
 
 			this.SortByPlayersButton = new UITextPanelButton( this.Theme, "Sort by players", 1.2f );
 			this.SortByPlayersButton.Top.Set( 12f, 0f );
-			this.SortByPlayersButton.Left.Set( 256f + 14f, 0f );
+			this.SortByPlayersButton.Left.Set( 256f + 14.5f, 0f );
 			this.SortByPlayersButton.Width.Set( 136f, 0f );
 			this.SortByPlayersButton.Height.Set( 32f, 0f );
 			this.SortByPlayersButton.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
@@ -147,8 +147,9 @@ namespace ServerBrowser.UI {
 			this.InnerContainer.Append( (UIElement)this.ServerList );
 
 			this.ServerListErr = new UIText( "", 1f );
-			this.ServerListErr.Top.Set( 60f, 0f );
+			this.ServerListErr.Top.Set( 60f+8f, 0f );
 			this.ServerListErr.Left.Set( -128, 0.5f );
+			this.ServerListErr.Width.Set( 256, 0f );
 			this.InnerContainer.Append( (UIElement)this.ServerListErr );
 
 			////

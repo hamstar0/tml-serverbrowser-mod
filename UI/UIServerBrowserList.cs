@@ -17,24 +17,27 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
-		public static UIServerDataElement[] GetListFromJsonStr( UITheme theme, string json_str,
+		public static IList<UIServerDataElement> GetListFromJsonStr( UITheme theme, string json_str,
 				Func<UIServerDataElement, UIServerDataElement, int> comparator,
-				Action<string, int> pre_join, Action on_err ) {
-			UIServerDataElement[] list = new UIServerDataElement[0];
+				Action<string, int> pre_join, out bool success ) {
+			IList<UIServerDataElement> list;
 
 			try {
 				var data = JsonConfig<IDictionary<string, ServerBrowserEntry>>.Deserialize( json_str );
-				list = new UIServerDataElement[data.Count];
-
-				int i = 0;
+				list = new List<UIServerDataElement>( data.Count );
+				
 				foreach( var kv in data ) {
-					list[i++] = new UIServerDataElement( theme, kv.Value, comparator, pre_join );
+					list.Add( new UIServerDataElement( theme, kv.Value, comparator, pre_join ) );
 				}
+
+				success = true;
 			} catch( Exception e ) {
+				list = new List<UIServerDataElement>();
+
 				int len = json_str.Length > 64 ? 64 : json_str.Length;
 				LogHelpers.Log( "GetListFromJsonStr - " + e.ToString() + " - " + json_str.Substring( 0, len ) );
 
-				on_err();
+				success = false;
 			}
 
 			return list;
@@ -48,7 +51,7 @@ namespace ServerBrowser.UI {
 		private UIServerModListPopup ModListPopup;
 		public Func<UIServerDataElement, UIServerDataElement, int> DefaultComparator { get; internal set; }
 
-		private ICollection<UIServerDataElement> FullServerList = new List<UIServerDataElement>();
+		private IList<UIServerDataElement> FullServerList = new List<UIServerDataElement>();
 
 
 		////////////////
@@ -80,52 +83,58 @@ namespace ServerBrowser.UI {
 			this.ModListPopup = new UIServerModListPopup( this.Theme );
 			this.ModListPopup.Top.Set( 0f, 0f );
 			this.ModListPopup.Left.Set( 0f, 0f );
-			//this.Append( (UIElement)this.ModListPopup );
 
 			////
 
 			this.DefaultComparator = UIServerDataElement.CompareByWorldName;
 
-			this.RefreshTheme();
+			this.RefreshTheme_Yielding();
 		}
 
 
 		////////////////
 
 		public void RenderList( ICollection<UIServerDataElement> list ) {
-			lock( UIServerBrowserList.MyLock ) {
-				if( this.MyList.Count > 0 ) {
-					this.MyList.Clear();
-				}
-				this.MyList.AddRange( list );
-				this.MyList.Recalculate();
+			if( this.MyList.Count > 0 ) {
+				this.MyList.Clear();
 			}
+			this.MyList.AddRange( list );
+			this.MyList.Recalculate();
 		}
 
 
-		public void RefreshServerList( Action<string, int> pre_join, Action on_success, Action on_err ) {
-			lock( UIServerBrowserList.MyLock ) {
-				if( this.MyList.Count > 0 ) {
+		public void RefreshServerList_Yielding( Action<string, int> pre_join, Action on_success, Action on_err ) {
+			if( this.FullServerList.Count > 0 ) {
+				//new Thread( () => { } ).Start();
+				lock( UIServerBrowserList.MyLock ) {
+					this.FullServerList.Clear();
 					this.MyList.Clear();
 					this.MyList.Recalculate();
 				}
 			}
 
 			Action<string> list_ready = delegate ( string output ) {
-				this.FullServerList = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join, on_err );
-				
-				if( this.FullServerList.Count > 0 ) {
-					lock( UIServerBrowserList.MyLock ) {
+				bool success;
+
+				lock( UIServerBrowserList.MyLock ) {
+					this.FullServerList = UIServerBrowserList.GetListFromJsonStr( this.Theme, output, this.Comparator, pre_join, out success );
+					
+					if( this.FullServerList.Count > 0 ) {
 						this.MyList.AddRange( this.FullServerList );
 						this.Recalculate();
 					}
 				}
-				on_success();
+
+				if( success ) {
+					on_success();
+				} else {
+					on_err();
+				}
 			};
 
 			Action<Exception, string> list_error = delegate ( Exception e, string output ) {
-				// TODO: Add error display to list UI
 				LogHelpers.Log( "List could not load " + e.ToString() );
+				on_err();
 			};
 
 			NetHelpers.MakeGetRequestAsync( "https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec",
@@ -135,7 +144,7 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
-		internal void UpdateOrder() {
+		internal void UpdateOrder_Yielding() {
 			lock( UIServerBrowserList.MyLock ) {
 				this.MyList.UpdateOrder();
 			}
@@ -147,29 +156,35 @@ namespace ServerBrowser.UI {
 
 		////////////////
 
-		public void Filter( Func<UIServerDataElement, bool> filter ) {
-			IList<UIServerDataElement> new_list = new List<UIServerDataElement>(
-				this.FullServerList.Where( elem => { return filter( elem ); } )
-			);
+		public void Filter_Yielding( Func<UIServerDataElement, bool> filter ) {
+			lock( UIServerBrowserList.MyLock ) {
+				IList<UIServerDataElement> new_list = new List<UIServerDataElement>(
+					this.FullServerList.Where( elem => { return filter( elem ); } )
+				);
 			
-			this.RenderList( new_list );
+				this.RenderList( new_list );
+			}
 		}
 
-		public void Unfilter() {
-			this.RenderList( this.FullServerList );
+		public void Unfilter_Yielding() {
+			lock( UIServerBrowserList.MyLock ) {
+				this.RenderList( this.FullServerList );
+			}
 		}
 
 
 		////////////////
 
-		public void RefreshTheme() {
+		public void RefreshTheme_Yielding() {
 			this.Theme.ApplyList( this );
 			this.Theme.ApplyPanel( this.ModListPopup );
 
-			lock( UIServerBrowserList.MyLock ) {
-				foreach( UIElement item in this.FullServerList ) {
-					var server_data_elem = (UIServerDataElement)item;
-					server_data_elem.RefreshTheme();
+			if( this.FullServerList.Count > 0 ) {
+				lock( UIServerBrowserList.MyLock ) {
+					foreach( UIElement item in this.FullServerList ) {
+						var server_data_elem = (UIServerDataElement)item;
+						server_data_elem.RefreshTheme();
+					}
 				}
 			}
 		}
@@ -178,11 +193,11 @@ namespace ServerBrowser.UI {
 		////////////////
 
 		public override void Draw( SpriteBatch sb ) {
+			bool is_hovering_server = false;
+
 			lock( UIServerBrowserList.MyLock ) {
 				base.Draw( sb );
 
-				bool is_hovering_server = false;
-				
 				foreach( UIElement item in this.MyList._items ) {
 					if( !item.IsMouseHovering ) { continue; }
 					is_hovering_server = true;
@@ -192,10 +207,10 @@ namespace ServerBrowser.UI {
 					this.ModListPopup.SetServer( server_data_elem.Data );
 					break;
 				}
+			}
 
-				if( is_hovering_server ) {
-					this.ModListPopup.Draw( sb );
-				}
+			if( is_hovering_server ) {
+				this.ModListPopup.Draw( sb );
 			}
 		}
 	}
