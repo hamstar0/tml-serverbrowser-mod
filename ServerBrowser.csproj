@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="UI\UIServerBrowserDialog_Init.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Func.cs" />
+    <Compile Include="UI\UIServerBrowserList_Fetch.cs" />
     <Compile Include="UI\UIServerBrowserList.cs" />
     <Compile Include="UI\UIServerModListPopup.cs" />
     <Compile Include="UI\UIServerBrowserDialog.cs" />

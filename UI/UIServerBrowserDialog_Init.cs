@@ -85,7 +85,7 @@ namespace ServerBrowser.UI {
 			};
 			this.InnerContainer.Append( (UIElement)this.SortByPlayersButton );
 
-			this.FilterByModInput = new UITextField( this.Theme, "Filter by mod" );
+			this.FilterByModInput = new UITextField( this.Theme, "Enter mod filter" );
 			this.FilterByModInput.Top.Set( 12f, 0f );
 			this.FilterByModInput.Left.Set( -320f, 1f );
 			this.FilterByModInput.Width.Set( 160f, 0f );
@@ -96,7 +96,7 @@ namespace ServerBrowser.UI {
 			};
 			this.InnerContainer.Append( (UIElement)this.FilterByModInput );
 
-			this.FilterByNameInput = new UITextField( this.Theme, "Filter by text" );
+			this.FilterByNameInput = new UITextField( this.Theme, "Enter text filter" );
 			this.FilterByNameInput.Top.Set( 12f, 0f );
 			this.FilterByNameInput.Left.Set( -160f, 1f );
 			this.FilterByNameInput.Width.Set( 160f, 0f );

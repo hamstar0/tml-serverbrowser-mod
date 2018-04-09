@@ -5,17 +5,17 @@ using HamstarHelpers.UIHelpers.Elements;
 namespace ServerBrowser.UI {
 	partial class UIServerBrowserDialog : UIDialog {
 		public void SortServerListByName() {
-			this.ServerList.DefaultComparator = UIServerDataElement.CompareByWorldName;
+			this.ServerList.SetComparator( UIServerDataElement.CompareByWorldName );
 			this.ServerList.UpdateOrder_Yielding();
 		}
 
 		public void SortServerListByPing() {
-			this.ServerList.DefaultComparator = UIServerDataElement.CompareByPing;
+			this.ServerList.SetComparator( UIServerDataElement.CompareByPing );
 			this.ServerList.UpdateOrder_Yielding();
 		}
 
 		public void SortServerListByPlayers() {
-			this.ServerList.DefaultComparator = UIServerDataElement.CompareByPlayers;
+			this.ServerList.SetComparator( UIServerDataElement.CompareByPlayers );
 			this.ServerList.UpdateOrder_Yielding();
 		}
 
