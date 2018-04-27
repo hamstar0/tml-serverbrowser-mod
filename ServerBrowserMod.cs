@@ -11,6 +11,14 @@ using Terraria.ModLoader;
 
 namespace ServerBrowser {
 	class ServerBrowserMod : Mod {
+		public static ServerBrowserMod Instance { get; private set; }
+
+		public static string GithubUserName { get { return "hamstar0"; } }
+		public static string GithubProjectName { get { return "tml-serverbrowser-mod"; } }
+
+
+		////////////////
+
 		private UIServerBrowserDialog Dialog;
 
 
@@ -27,6 +35,8 @@ namespace ServerBrowser {
 		////////////////
 
 		public override void Load() {
+			ServerBrowserMod.Instance = this;
+
 			if( !Main.dedServ ) {
 				var theme = new UITheme();
 				theme.UrlColor = Color.Lerp( theme.UrlColor, Color.White, 0.5f );
@@ -35,7 +45,7 @@ namespace ServerBrowser {
 				
 				this.Dialog = new UIServerBrowserDialog( theme );
 
-				MenuItem.AddMenuItem( "Browse Servers", MenuItem.MenuTopPos - 80, 12, delegate () {
+				MenuItem.AddMenuItem( "Browse Servers", MenuItem.MenuTopPos - 80, 12, delegate() {
 					Main.OpenPlayerSelect( plr_data => {
 						Main.ServerSideCharacter = false;
 						plr_data.SetAsActive();
@@ -57,17 +67,27 @@ namespace ServerBrowser {
 					this.Dialog.Close();
 				} );
 
-				Main.OnPostDraw += this.DrawBrowser;
+				Main.OnPostDraw += ServerBrowserMod._DrawBrowser;
 			}
 		}
 
 		public override void Unload() {
 			if( !Main.dedServ ) {
-				Main.OnPostDraw -= this.DrawBrowser;
+				this.Dialog.Close();	// Just in case?
+
+				Main.OnPostDraw -= ServerBrowserMod._DrawBrowser;
 			}
+
+			ServerBrowserMod.Instance = null;
 		}
 
 		////////////////
+
+		private static void _DrawBrowser( GameTime game_time ) {
+			if( ServerBrowserMod.Instance != null ) {
+				ServerBrowserMod.Instance.DrawBrowser( game_time );
+			}
+		}
 
 		private bool HasErrored = false;
 

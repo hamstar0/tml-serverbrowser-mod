@@ -125,7 +125,7 @@ namespace ServerBrowser.UI {
 		////////////////
 
 		public void RefreshTheme_Yielding() {
-			this.Theme.ApplyList( this );
+			this.Theme.ApplyListContainer( this );
 			this.Theme.ApplyPanel( this.ModListPopup );
 
 			if( this.FullServerList.Count > 0 ) {
