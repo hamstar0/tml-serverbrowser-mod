@@ -49,6 +49,9 @@ namespace ServerBrowser.UI {
 			};
 
 			base.OnActivate();
+
+			this.ServerListErr.SetText( "Loading servers. Please wait." );
+
 			this.ServerList.RefreshServerList_Yielding( pre_join, on_success, on_err );
 		}
 

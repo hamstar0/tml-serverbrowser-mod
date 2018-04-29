@@ -45,26 +45,19 @@ namespace ServerBrowser {
 				
 				this.Dialog = new UIServerBrowserDialog( theme );
 
-				MenuItem.AddMenuItem( "Browse Servers", MenuItem.MenuTopPos - 80, 12, delegate() {
+				MenuItem.AddMenuItem( "Browse Servers", MenuItem.MenuTopPos - 80, 12, () => {
 					Main.OpenPlayerSelect( plr_data => {
 						Main.ServerSideCharacter = false;
 						plr_data.SetAsActive();
 
 						Main.menuMode = 77777;
-						this.Dialog.Open();
+						ServerBrowserMod.Instance.Dialog.Open();
 					} );
-					//Main.LoadPlayers();
-					//Main.menuMultiplayer = true;
-					//Main.PlaySound( 10, -1, -1, 1, 1f, 0f );
-					//Main.menuMode = 1;
-
-					//Main.menuMode = 77777;
-					//this.Dialog.Open();
 				} );
 
 				MenuItem.AddMenuItem( "Back", -78, 77777, delegate () {
 					Main.menuMode = 12;
-					this.Dialog.Close();
+					ServerBrowserMod.Instance.Dialog.Close();
 				} );
 
 				Main.OnPostDraw += ServerBrowserMod._DrawBrowser;
@@ -73,8 +66,10 @@ namespace ServerBrowser {
 
 		public override void Unload() {
 			if( !Main.dedServ ) {
-				this.Dialog.Close();	// Just in case?
+				//this.Dialog.Close();    // Just in case?
+				this.Dialog = null;
 
+				Main.ClearPendingPlayerSelectCallbacks();
 				Main.OnPostDraw -= ServerBrowserMod._DrawBrowser;
 			}
 
