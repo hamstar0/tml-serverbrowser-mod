@@ -159,10 +159,10 @@ namespace ServerBrowser.UI {
 			modrecommend_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)modrecommend_url );
 
-			var support_url = new UIWebUrl( this.Theme, "Help me upgrade for more uptime!", "https://www.patreon.com/hamstar0", true, 0.86f );
+			var support_url = new UIWebUrl( this.Theme, "Help me improve hosting!", "https://www.patreon.com/hamstar0", true, 0.86f );
 			support_url.Top.Set( -12f, 1f );
-			support_url.Left.Set( -192f, 1f );
-			support_url.Width.Set( 192f, 0f );
+			support_url.Left.Set( -176f, 1f );
+			support_url.Width.Set( 176f, 0f );
 			this.InnerContainer.Append( (UIElement)support_url );
 		}
 	}
