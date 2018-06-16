@@ -1,7 +1,7 @@
-﻿using HamstarHelpers.DebugHelpers;
+﻿using HamstarHelpers.Components.UI;
+using HamstarHelpers.Components.UI.Elements;
+using HamstarHelpers.DebugHelpers;
 using HamstarHelpers.NetHelpers;
-using HamstarHelpers.UIHelpers;
-using HamstarHelpers.UIHelpers.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;

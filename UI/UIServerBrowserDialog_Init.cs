@@ -1,8 +1,7 @@
-﻿using HamstarHelpers.DebugHelpers;
-using HamstarHelpers.Helpers.UIHelpers.Elements;
-using HamstarHelpers.UIHelpers;
-using HamstarHelpers.UIHelpers.Elements;
-using HamstarHelpers.Utilities.Menu;
+﻿using HamstarHelpers.Components.UI;
+using HamstarHelpers.Components.UI.Elements;
+using HamstarHelpers.Components.UI.Menu;
+using HamstarHelpers.DebugHelpers;
 using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -160,10 +159,10 @@ namespace ServerBrowser.UI {
 			modrecommend_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)modrecommend_url );
 
-			var support_url = new UIWebUrl( this.Theme, "Support Server Browser!", "https://www.patreon.com/hamstar0", true, 0.86f );
+			var support_url = new UIWebUrl( this.Theme, "Help me upgrade for more uptime!", "https://www.patreon.com/hamstar0", true, 0.86f );
 			support_url.Top.Set( -12f, 1f );
-			support_url.Left.Set( -172f, 1f );
-			support_url.Width.Set( 172f, 0f );
+			support_url.Left.Set( -192f, 1f );
+			support_url.Width.Set( 192f, 0f );
 			this.InnerContainer.Append( (UIElement)support_url );
 		}
 	}

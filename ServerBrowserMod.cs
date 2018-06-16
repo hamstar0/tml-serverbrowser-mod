@@ -1,6 +1,6 @@
-﻿using HamstarHelpers.DebugHelpers;
-using HamstarHelpers.UIHelpers;
-using HamstarHelpers.Utilities.Menu;
+﻿using HamstarHelpers.Components.UI;
+using HamstarHelpers.Components.UI.Menu;
+using HamstarHelpers.DebugHelpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ServerBrowser.UI;

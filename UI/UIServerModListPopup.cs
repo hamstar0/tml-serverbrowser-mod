@@ -1,10 +1,11 @@
-﻿using HamstarHelpers.UIHelpers;
+﻿using HamstarHelpers.Components.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+
 
 namespace ServerBrowser.UI {
 	class UIServerModListPopup : UIPanel {

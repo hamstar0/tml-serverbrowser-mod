@@ -1,7 +1,7 @@
-﻿using HamstarHelpers.DebugHelpers;
+﻿using HamstarHelpers.Components.Config;
+using HamstarHelpers.Components.UI;
+using HamstarHelpers.DebugHelpers;
 using HamstarHelpers.NetHelpers;
-using HamstarHelpers.UIHelpers;
-using HamstarHelpers.Utilities.Config;
 using System;
 using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
@@ -71,7 +71,8 @@ namespace ServerBrowser.UI {
 				on_err();
 			};
 
-			NetHelpers.MakeGetRequestAsync( "https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec",
+			NetHelpers.MakeGetRequestAsync(
+				"https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec",
 				list_ready, list_error );
 		}
 	}
