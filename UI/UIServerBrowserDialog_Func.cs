@@ -56,5 +56,26 @@ namespace ServerBrowser.UI {
 				return false;
 			} );
 		}
+
+
+		public void CycleFilterServerListByLocked() {
+			if( this.PasswordFilterMode == 0 ) {
+				this.PasswordFilterMode = 1;
+			} else if( this.PasswordFilterMode >= 1 ) {
+				this.PasswordFilterMode = -1;
+			} else {
+				this.PasswordFilterMode = 0;
+			}
+
+			this.ServerList.Filter_Yielding( elem => {
+				if( this.PasswordFilterMode == 0 ) {
+					return true;
+				} else if( this.PasswordFilterMode >= 1 ) {
+					return elem.Data.IsPassworded;
+				} else {
+					return !elem.Data.IsPassworded;
+				}
+			} );
+		}
 	}
 }

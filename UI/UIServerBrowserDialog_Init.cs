@@ -108,6 +108,26 @@ namespace ServerBrowser.UI {
 
 			////
 
+			this.LockedFilterButton = new UITextPanelButton( this.Theme, "All", 0.65f );
+			this.LockedFilterButton.Top.Set( 42f, 0f );
+			this.LockedFilterButton.Left.Set( -72f, 1f );
+			this.LockedFilterButton.Width.Set( 72f, 0f );
+			this.LockedFilterButton.Height.Pixels = 16f;
+			this.LockedFilterButton.OnClick += delegate ( UIMouseEvent evt, UIElement listening_element ) {
+				this.CycleFilterServerListByLocked();
+
+				if( this.PasswordFilterMode == 0 ) {
+					this.LockedFilterButton.SetText( "All" );
+				} else if( this.PasswordFilterMode >= 1 ) {
+					this.LockedFilterButton.SetText( "Locked" );
+				} else {
+					this.LockedFilterButton.SetText( "Open" );
+				}
+			};
+			this.InnerContainer.Append( (UIElement)this.LockedFilterButton );
+
+			////
+
 			var server_name_col_label = new UIText( "World Name", 0.75f );
 			server_name_col_label.Top.Set( 46f, 0f );
 			server_name_col_label.Left.Set( UIServerDataElement.WorldLabelLeft + 8f, 0f );
@@ -159,7 +179,7 @@ namespace ServerBrowser.UI {
 			modrecommend_url.Width.Set( 172f, 0f );
 			this.InnerContainer.Append( (UIElement)modrecommend_url );
 
-			var support_url = new UIWebUrl( this.Theme, "Help me improve hosting!", "https://www.patreon.com/hamstar0", true, 0.86f );
+			var support_url = new UIWebUrl( this.Theme, "Help me improve uptime!", "https://www.patreon.com/hamstar0", true, 0.86f );
 			support_url.Top.Set( -12f, 1f );
 			support_url.Left.Set( -176f, 1f );
 			support_url.Width.Set( 176f, 0f );

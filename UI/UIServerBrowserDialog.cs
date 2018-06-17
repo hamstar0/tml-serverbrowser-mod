@@ -14,11 +14,14 @@ namespace ServerBrowser.UI {
 		private UITextPanelButton SortByNameButton;
 		private UITextPanelButton SortByPingButton;
 		private UITextPanelButton SortByPlayersButton;
+		private UITextPanelButton LockedFilterButton;
 		private UITextField FilterByModInput;
 		private UITextField FilterByNameInput;
 		private UIText ServerListErr;
 
 		private UIServerBrowserList ServerList;
+
+		private int PasswordFilterMode = 0;
 		
 		private int LastSeenScreenWidth;
 		private int LastSeenScreenHeight;
@@ -65,6 +68,7 @@ namespace ServerBrowser.UI {
 			this.SortByNameButton.RefreshTheme();
 			this.SortByPingButton.RefreshTheme();
 			this.SortByPlayersButton.RefreshTheme();
+			this.LockedFilterButton.RefreshTheme();
 			this.FilterByModInput.RefreshTheme();
 			this.FilterByNameInput.RefreshTheme();
 			this.ServerList.RefreshTheme_Yielding();

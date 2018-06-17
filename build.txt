@@ -1,5 +1,5 @@
 author = hamstar
-version = 1.0.3.3
+version = 1.1.0
 displayName = Server Browser
 modReferences = HamstarHelpers@1.6.0
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
