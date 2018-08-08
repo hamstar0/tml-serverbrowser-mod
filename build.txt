@@ -1,7 +1,9 @@
 author = hamstar
-version = 1.1.0
+version = 1.1.1
 displayName = Server Browser
-modReferences = HamstarHelpers@1.6.0
+modReferences = HamstarHelpers@2.0.1
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
 includePDB = true
+languageVersion = 6
+side = Client
 homepage = https://forums.terraria.org/index.php?threads/server-browser-early-beta.68346/

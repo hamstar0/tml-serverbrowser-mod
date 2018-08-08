@@ -1,5 +1,5 @@
 ﻿using HamstarHelpers.Components.UI.Elements;
-using HamstarHelpers.DebugHelpers;
+using HamstarHelpers.Helpers.DebugHelpers;
 
 
 namespace ServerBrowser.UI {

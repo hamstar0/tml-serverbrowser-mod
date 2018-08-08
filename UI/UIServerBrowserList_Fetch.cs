@@ -1,7 +1,7 @@
 ﻿using HamstarHelpers.Components.Config;
 using HamstarHelpers.Components.UI;
-using HamstarHelpers.DebugHelpers;
-using HamstarHelpers.NetHelpers;
+using HamstarHelpers.Helpers.DebugHelpers;
+using HamstarHelpers.Helpers.NetHelpers;
 using System;
 using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
