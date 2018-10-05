@@ -1,0 +1,3 @@
+ServerSideCharacters = Prevents players modifying their character (or gear) outside of a server.
+HEROsMod = General server administration stuff.
+Nihilism = Allows removing specific items or NPCs from the game.

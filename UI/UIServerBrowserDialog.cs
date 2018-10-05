@@ -27,6 +27,7 @@ namespace ServerBrowser.UI {
 		private int LastSeenScreenHeight;
 
 
+
 		////////////////
 
 		public UIServerBrowserDialog( UITheme theme ) : base( theme, 768, 346 ) {

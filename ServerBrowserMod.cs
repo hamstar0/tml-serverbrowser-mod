@@ -4,38 +4,35 @@ using HamstarHelpers.Helpers.DebugHelpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ServerBrowser.UI;
+using ServerBrowser.Listing;
 using System;
 using Terraria;
 using Terraria.ModLoader;
 
 
 namespace ServerBrowser {
-	class ServerBrowserMod : Mod {
+	partial class ServerBrowserMod : Mod {
 		public static ServerBrowserMod Instance { get; private set; }
 
-		public static string GithubUserName { get { return "hamstar0"; } }
-		public static string GithubProjectName { get { return "tml-serverbrowser-mod"; } }
 
 
 		////////////////
 
 		private UIServerBrowserDialog Dialog;
+		internal ServerBrowserReporter ServerBrowser;
+
 
 
 		////////////////
 
-		public ServerBrowserMod() {
-			this.Properties = new ModProperties() {
-				Autoload = true,
-				AutoloadGores = true,
-				AutoloadSounds = true
-			};
-		}
+		public ServerBrowserMod() { }
 
 		////////////////
 
 		public override void Load() {
 			ServerBrowserMod.Instance = this;
+
+			this.ServerBrowser = new ServerBrowserReporter();
 
 			if( !Main.dedServ ) {
 				var theme = new UITheme();

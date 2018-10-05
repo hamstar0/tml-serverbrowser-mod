@@ -27,7 +27,7 @@ namespace ServerBrowser.UI {
 				list = new List<UIServerDataElement>();
 
 				int len = json_str.Length > 64 ? 64 : json_str.Length;
-				LogHelpers.Log( "GetListFromJsonStr - " + e.ToString() + " - " + json_str.Substring( 0, len ) );
+				LogHelpers.Log( "!ServerBrowser.UIServerBrowserList.GetListFromJsonStr - " + e.ToString() + " - " + json_str.Substring( 0, len ) );
 
 				success = false;
 			}
@@ -47,7 +47,7 @@ namespace ServerBrowser.UI {
 				}
 			}
 
-			Action<string> list_ready = delegate ( string output ) {
+			Func<string, Tuple<object, bool>> list_ready = ( output ) => {
 				bool success;
 
 				lock( UIServerBrowserList.MyLock ) {
@@ -61,19 +61,20 @@ namespace ServerBrowser.UI {
 
 				if( success ) {
 					on_success();
-				} else {
-					on_err();
 				}
+
+				return Tuple.Create( (object)null, success );
 			};
 
-			Action<Exception, string> list_error = delegate ( Exception e, string output ) {
+			Action<Exception, string> list_error = ( e, output ) => {
 				LogHelpers.Log( "List could not load " + e.ToString() );
 				on_err();
 			};
 
 			NetHelpers.MakeGetRequestAsync(
-				"https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec",
-				list_ready, list_error );
+				"https://script.google.com/macros/s/AKfycbwB2n0X4LWDhpb6wk_VaeWG9gliBi5qLdG7Y8oPgw/exec",
+				list_ready, list_error
+			);
 		}
 	}
 }

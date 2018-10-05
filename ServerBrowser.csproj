@@ -35,6 +35,13 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\ServerBrowserPrivateCommand.cs" />
+    <Compile Include="_Config.cs" />
+    <Compile Include="Listing\ServerBrowserReport.cs" />
+    <Compile Include="Listing\ServerBrowserReport_Announce.cs" />
+    <Compile Include="Listing\ServerBrowserReport_AutoUpdate.cs" />
+    <Compile Include="Listing\ServerBrowserReport_ProofOfWork.cs" />
+    <Compile Include="ServerBrowserMod_Meta.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Init.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Func.cs" />
     <Compile Include="UI\UIServerBrowserList_Fetch.cs" />
@@ -66,6 +73,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Xact\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Xact.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Reference\tModLoader Patcher\references\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Terraria.Libraries.ReLogic.ReLogic, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -79,11 +89,13 @@
     <Content Include="build.txt" />
     <Content Include="description.txt" />
     <Content Include="icon.png" />
+    <Content Include="recommendations.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files (x86)\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
