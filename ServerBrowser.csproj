@@ -37,10 +37,10 @@
   <ItemGroup>
     <Compile Include="Commands\ServerBrowserPrivateCommand.cs" />
     <Compile Include="_Config.cs" />
-    <Compile Include="Listing\ServerBrowserReport.cs" />
-    <Compile Include="Listing\ServerBrowserReport_Announce.cs" />
-    <Compile Include="Listing\ServerBrowserReport_AutoUpdate.cs" />
-    <Compile Include="Listing\ServerBrowserReport_ProofOfWork.cs" />
+    <Compile Include="Reporter\ServerBrowserReport.cs" />
+    <Compile Include="Reporter\ServerBrowserReport_Announce.cs" />
+    <Compile Include="Reporter\ServerBrowserReport_AutoUpdate.cs" />
+    <Compile Include="Reporter\ServerBrowserReport_ProofOfWork.cs" />
     <Compile Include="ServerBrowserMod_Meta.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Init.cs" />
     <Compile Include="UI\UIServerBrowserDialog_Func.cs" />

@@ -11,7 +11,7 @@ using Terraria;
 using Terraria.ModLoader;
 
 
-namespace ServerBrowser.Listing {
+namespace ServerBrowser.Reporter {
 	partial class ServerBrowserReporter {
 		public static bool CanAnnounceServer() {
 			//return Netplay.ServerPassword == "";
@@ -83,7 +83,7 @@ namespace ServerBrowser.Listing {
 
 			int pvp = 0;
 			bool[] team_checks = new bool[10];
-			ServerBrowserReporter server_browser = mymod.ServerBrowser;
+			ServerBrowserReporter server_browser = mymod.Reporter;
 
 			for( int i=0; i<Main.player.Length; i++ ) {
 				Player player = Main.player[i];
@@ -113,7 +113,7 @@ namespace ServerBrowser.Listing {
 				server_data.PlayerCount = Main.ActivePlayersCount;
 				server_data.PlayerPvpCount = pvp;
 				server_data.TeamsCount = team_count;
-				server_data.AveragePing = mymod.ServerBrowser.AveragePing;
+				server_data.AveragePing = mymod.Reporter.AveragePing;
 				server_data.Mods = new Dictionary<string, string>();
 				server_data.Version = ( vers.Major * 1000000 ) + ( vers.Minor * 10000 ) + ( vers.Build * 100 ) + vers.Revision;
 

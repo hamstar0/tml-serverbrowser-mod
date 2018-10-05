@@ -4,7 +4,7 @@ using HamstarHelpers.Services.Promises;
 using System.Collections.Generic;
 
 
-namespace ServerBrowser.Listing {
+namespace ServerBrowser.Reporter {
 	class ServerBrowserEntry {
 		public string ServerIP;
 		public int Port;
@@ -64,8 +64,8 @@ namespace ServerBrowser.Listing {
 
 
 	partial class ServerBrowserReporter {
-		private readonly static string URL =
-			"https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec";
+		public static string URL => "https://script.google.com/macros/s/AKfycbwB2n0X4LWDhpb6wk_VaeWG9gliBi5qLdG7Y8oPgw/exec";
+			//"https://script.google.com/macros/s/AKfycbzQl2JmJzdEHguVI011Hk1KuLktYJPDzpWA_tDbyU_Pk02fILUw/exec";
 
 		private static long LastSendTimestamp;
 
@@ -81,14 +81,11 @@ namespace ServerBrowser.Listing {
 		////////////////
 
 		//private bool IsSendingUpdates = true;
-		public int AveragePing { get; internal set; }
 
 
 		////////////////
 
 		internal ServerBrowserReporter() {
-			this.AveragePing = -1;
-
 			Promises.AddWorldLoadEachPromise( delegate {
 				this.InitializeLoopingServerAnnounce();
 			} );
@@ -98,17 +95,6 @@ namespace ServerBrowser.Listing {
 
 		private void OnWorldExit() {
 			this.StopLoopingServerAnnounce();
-		}
-
-
-		////////////////
-
-		internal void UpdatePingAverage( int ping ) {
-			if( this.AveragePing == -1 ) {
-				this.AveragePing = ping;
-			} else {
-				this.AveragePing = (ping + ( this.AveragePing * 2 )) / 3;
-			}
 		}
 	}
 }

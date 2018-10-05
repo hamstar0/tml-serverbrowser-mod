@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 
 
-namespace ServerBrowser.Listing {
+namespace ServerBrowser.Reporter {
 	partial class ServerBrowserReporter {
 		private static void DoWorkToValidateServer( ServerBrowserEntry server_data, string hash ) {
 			string hash_base = "";

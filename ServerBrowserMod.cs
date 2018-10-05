@@ -4,7 +4,7 @@ using HamstarHelpers.Helpers.DebugHelpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ServerBrowser.UI;
-using ServerBrowser.Listing;
+using ServerBrowser.Reporter;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -19,7 +19,7 @@ namespace ServerBrowser {
 		////////////////
 
 		private UIServerBrowserDialog Dialog;
-		internal ServerBrowserReporter ServerBrowser;
+		internal ServerBrowserReporter Reporter;
 
 
 
@@ -32,7 +32,7 @@ namespace ServerBrowser {
 		public override void Load() {
 			ServerBrowserMod.Instance = this;
 
-			this.ServerBrowser = new ServerBrowserReporter();
+			this.Reporter = new ServerBrowserReporter();
 
 			if( !Main.dedServ ) {
 				var theme = new UITheme();

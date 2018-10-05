@@ -5,7 +5,7 @@ using System;
 using Terraria;
 
 
-namespace ServerBrowser.Listing {
+namespace ServerBrowser.Reporter {
 	partial class ServerBrowserReporter {
 		public static bool CanPromptForBrowserAdd() {
 			//return ServerBrowserMod.Instance.Config.IsServerPromptingUsersBeforeListingOnBrowser

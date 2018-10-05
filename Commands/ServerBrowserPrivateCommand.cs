@@ -31,7 +31,7 @@ namespace ServerBrowser.Commands {
 				return;
 			}
 
-			mymod.ServerBrowser.StopLoopingServerAnnounce();
+			mymod.Reporter.StopLoopingServerAnnounce();
 
 			//caller.Reply( "Server set private. For future servers, set \"IsServerHiddenFromBrowser: true\" in the Mod Helpers config settings.", Color.GreenYellow );
 			caller.Reply( "Server set private. For permanent private servers, Server Browser mod must be disabled (for now).", Color.GreenYellow );

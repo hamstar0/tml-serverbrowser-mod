@@ -2,6 +2,7 @@
 using HamstarHelpers.Components.UI;
 using HamstarHelpers.Helpers.DebugHelpers;
 using HamstarHelpers.Helpers.NetHelpers;
+using ServerBrowser.Reporter;
 using System;
 using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
@@ -72,7 +73,7 @@ namespace ServerBrowser.UI {
 			};
 
 			NetHelpers.MakeGetRequestAsync(
-				"https://script.google.com/macros/s/AKfycbwB2n0X4LWDhpb6wk_VaeWG9gliBi5qLdG7Y8oPgw/exec",
+				ServerBrowserReporter.URL, //https://script.google.com/macros/s/AKfycbwB2n0X4LWDhpb6wk_VaeWG9gliBi5qLdG7Y8oPgw/exec
 				list_ready, list_error
 			);
 		}
