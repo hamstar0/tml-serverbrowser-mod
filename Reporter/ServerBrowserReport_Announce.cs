@@ -113,7 +113,7 @@ namespace ServerBrowser.Reporter {
 				server_data.PlayerCount = Main.ActivePlayersCount;
 				server_data.PlayerPvpCount = pvp;
 				server_data.TeamsCount = team_count;
-				server_data.AveragePing = mymod.Reporter.AveragePing;
+				server_data.AveragePing = InfoHelpers.GetAveragePingOfServer();
 				server_data.Mods = new Dictionary<string, string>();
 				server_data.Version = ( vers.Major * 1000000 ) + ( vers.Minor * 10000 ) + ( vers.Build * 100 ) + vers.Revision;
 

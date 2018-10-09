@@ -1,1 +1,3 @@
+THIS VERSION IS WIP AND NON-FUNCTIONAL. Please hang tight.
+
 Allows browsing and joining active multiplayer tModLoader games from the main (multiplayer) menu.
